@@ -5,7 +5,9 @@ A micropython script for esp8266 that pushes meteorologic values directly into I
 
 ## Third-party dependencies
 
-- for BME280 sensor usage : https://github.com/catdog2/mpy_bme280_esp8266
+- for BME280 sensor usage : you need to copy bme280.py from 
+https://github.com/catdog2/mpy_bme280_esp8266 to your esp8266's filesystem
+besides main.py.
 
 ## Identify your DS18B20 sensors
 
