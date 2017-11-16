@@ -15,6 +15,7 @@ influxdb_db = 'testing'
 
 # sensor declarations
 bme280_enabled = True
+ds18b20_enabled = True
 ds18b20_sensors = {
         "inside0": bytearray(b'(\xf6\xd2\xa1\x04\x00\x00\xbb')
         }
