@@ -7,6 +7,8 @@ import bme280
 
 hostname = "esp8266"
 
+polling_interval = 10
+
 # influxdb database settings
 influxdb_protocol = 'http'
 influxdb_host = '192.168.20.26'
@@ -53,11 +55,14 @@ def fetch_ds():
 def post_influxdb(sensor_type, name, value):
     url = "{}://{}:{}/write?db={}".format(influxdb_protocol, influxdb_host, influxdb_port, influxdb_db)
     data = "{},host={}_{} value={}".format(sensor_type, hostname, name, value)
-    resp = urequests.post(url, data=data)
-    if resp.status_code == 204:
-        return True
-    else:
-        return False
+    try:
+        resp = urequests.post(url, data=data)
+        if resp.status_code == 204:
+            return True
+        else:
+            return False
+    except OSError:
+        print('Error while posting values to InfluxDB, maybe network is not yet ready')
 
 def lustroloop():
     while True:
@@ -72,5 +77,7 @@ def lustroloop():
             if ds_values:
                 for name, temperature in ds_values.items():
                     post_influxdb("temperature", name, temperature)
-        time.sleep(10)
+        time.sleep(polling_interval)
 
+print('Lustrometer is running ...')
+lustroloop()
