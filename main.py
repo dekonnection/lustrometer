@@ -33,6 +33,13 @@ bme = bme280.BME280(i2c=i2c)
 # DS18B20 sensor initialization
 ds = ds18x20.DS18X20(onewire.OneWire(machine.Pin(onewire_data)))
 
+def fetch_bme():
+    raw_values = bme.read_compensated_data()
+    temperature = raw_values[0]/100
+    pressure = raw_values[1]/25600
+    humidity = raw_values[2]/1024
+    return [temperature, pressure, humidity]
+
 def post_influxdb(sensor, value):
     url = "{}://{}:{}/write?db={}".format(influxdb_protocol, influxdb_host, influxdb_port, influxdb_db)
     data = "{},host={} value={}".format(sensor, hostname, value)
