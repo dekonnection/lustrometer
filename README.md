@@ -3,10 +3,11 @@ A micropython script for esp8266 that pushes meteorologic values directly into I
 
 **This is a work in progress, it's not working yet !**
 
-## Third-party dependencies
+## Features
 
-- for BME280 sensor usage : bme280.py is from Peter Dahlberg and available at 
-https://github.com/catdog2/mpy_bme280_esp8266.
+- support for one BME280/BMP280 sensor via I2C : temperature, pressure and humidity (BME280 only)
+- support for multiple DS18B20 temperature sensors on the same 1-wire bus
+- push values directly into an InfluxDB timeseries database, with correct measurements naming
 
 ## Identify your DS18B20 sensors
 
@@ -30,3 +31,8 @@ This will print a list of your connected DS18B20 sensors, like this :
 
 This is the unique identifier of each of your sensors, and this is what you need
 to paste in the sensor list.
+
+## Third-party dependencies
+
+- for BME280 sensor usage : bme280.py is from Peter Dahlberg and available at 
+https://github.com/catdog2/mpy_bme280_esp8266.
