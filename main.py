@@ -5,6 +5,12 @@ import onewire
 import ds18x20
 import bme280
 
+# influxdb database settings
+influxdb_protocol = 'http'
+influxdb_host = '192.168.20.26'
+influxdb_port = 8086
+influxdb_db = 'testing'
+
 # sensor declarations
 bme280_enabled = True
 ds18b20_sensors = {
