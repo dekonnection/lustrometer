@@ -27,6 +27,7 @@ i2c_scl = 5
 i2c_sda = 4
 onewire_data = 0
 
+
 # BME280 sensor initialization
 i2c = machine.I2C(scl=machine.Pin(i2c_scl), sda=machine.Pin(i2c_sda))
 bme = bme280.BME280(i2c=i2c)
@@ -49,21 +50,27 @@ def fetch_ds():
         temperatures[name] = temperature
     return temperatures
 
-
-def post_influxdb(sensor, value):
+def post_influxdb(sensor_type, name, value):
     url = "{}://{}:{}/write?db={}".format(influxdb_protocol, influxdb_host, influxdb_port, influxdb_db)
-    data = "{},host={} value={}".format(sensor, hostname, value)
+    data = "{},host={}_{} value={}".format(sensor_type, hostname, name, value)
     resp = urequests.post(url, data=data)
     if resp.status_code == 204:
         return True
     else:
         return False
 
-#while True:
-#    print(bme.values)
-#    ds.convert_temp()
-#    for name, sensor in ds18b20_sensors.items():
-#        temp = ds.read_temp(sensor)
-#        print("{} : {}".format(name, temp))
-#    time.sleep(10)
+def lustroloop():
+    while True:
+        if bme280_enabled:
+            bme_values = fetch_bme()
+            if bme_values:
+                post_influxdb("temperature", "bme", bme_values[0])
+                post_influxdb("pressure", "bme", bme_values[1])
+                post_influxdb("humidity", "bme", bme_values[2])
+        if ds18b20_enabled:
+            ds_values = fetch_ds()
+            if ds_values:
+                for name, temperature in ds_values.items():
+                    post_influxdb("temperature", name, temperature)
+        time.sleep(10)
 
