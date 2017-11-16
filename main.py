@@ -40,6 +40,15 @@ def fetch_bme():
     humidity = raw_values[2]/1024
     return [temperature, pressure, humidity]
 
+def fetch_ds():
+    temperatures = {}
+    ds.convert_temp()
+    for name, sensor in ds18b20_sensors.items():
+        temperature = ds.read_temp(sensor)
+        temperatures[name] = temperature
+    return temperatures
+
+
 def post_influxdb(sensor, value):
     url = "{}://{}:{}/write?db={}".format(influxdb_protocol, influxdb_host, influxdb_port, influxdb_db)
     data = "{},host={} value={}".format(sensor, hostname, value)
