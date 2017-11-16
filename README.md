@@ -1,8 +1,6 @@
 # lustrometer
 A micropython script for esp8266 that pushes meteorologic values directly into InfluxDB
 
-**This is a work in progress, it's not working yet !**
-
 ## Features
 
 - support for one BME280/BMP280 sensor via I2C : temperature, pressure and humidity (BME280 only)
