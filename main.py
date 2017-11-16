@@ -58,11 +58,13 @@ def post_influxdb(sensor_type, name, value):
     try:
         resp = urequests.post(url, data=data)
         if resp.status_code == 204:
+            print("[OK] Value successfully posted to InfluxDB : {}".format(data))
             return True
         else:
+            print("[ERR] Error while posting value to InfluxDB, return code : {}".format(resp.status_code))
             return False
     except OSError:
-        print('Error while posting values to InfluxDB, maybe network is not yet ready')
+        print('[ERR] Error while posting value to InfluxDB : maybe network is not ready yet.')
 
 def lustroloop():
     while True:
@@ -79,5 +81,5 @@ def lustroloop():
                     post_influxdb("temperature", name, temperature)
         time.sleep(polling_interval)
 
-print('Lustrometer is running ...')
+print('\n###########################\nLustrometer is running ...\n###########################\n')
 lustroloop()
