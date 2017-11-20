@@ -1,0 +1,27 @@
+## lustrometer configuration.py example file
+## (all settings are mandatory)
+
+# this is what will be written in the 'host' key of your measurements
+hostname = "esp8266"
+
+polling_interval = 10
+
+# influxdb database settings
+influxdb_protocol = 'http'
+influxdb_host = '192.168.20.26'
+influxdb_port = 8086
+influxdb_db = 'testing'
+
+# sensor declarations
+bme280_enabled = True
+ds18b20_enabled = True
+ds18b20_sensors = {
+        "inside0": bytearray(b'(\xf6\xd2\xa1\x04\x00\x00\xbb')
+        }
+
+# pin values : modify according to your wiring
+# for most esp8266 boards, you may refer to :
+# https://github.com/esp8266/Arduino/issues/584#issuecomment-123715951
+bme280_pin_scl = 5
+bme280_pin_sda = 4
+ds18b20_pin_data = 0
