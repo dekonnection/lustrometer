@@ -23,6 +23,7 @@ def fetch_bme():
 def fetch_ds():
     temperatures = {}
     ds.convert_temp()
+    time.sleep_ms(750)
     for name, sensor in configuration.ds18b20_sensors.items():
         temperature = ds.read_temp(sensor)
         temperatures[name] = temperature
