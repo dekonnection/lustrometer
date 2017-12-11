@@ -14,10 +14,17 @@ bme = bme280.BME280(mode=5, i2c=i2c)
 ds = ds18x20.DS18X20(onewire.OneWire(machine.Pin(configuration.ds18b20_pin_data)))
 
 def fetch_bme():
-    raw_values = bme.read_compensated_data()
-    temperature = raw_values[0]/100
-    pressure = raw_values[1]/25600
-    humidity = raw_values[2]/1024
+    # sometimes, the BME280 returns an aberrant pressure value, so we poll the 
+    # sensor 5 times and return the average after removing the extremes
+    values_list = [[],[],[]]
+    for i in range(5):
+        raw_values = bme.read_compensated_data()
+        values_list[0].append(raw_values[0])
+        values_list[1].append(raw_values[1])
+        values_list[2].append(raw_values[2])
+    temperature = ((sum(values_list[0]) - max(values_list[0]) - min(values_list[0])) / 3) / 100
+    pressure = ((sum(values_list[1]) - max(values_list[1]) - min(values_list[1])) / 3) / 25600
+    humidity = ((sum(values_list[2]) - max(values_list[2]) - min(values_list[2])) / 3) / 1024
     return [temperature, pressure, humidity]
 
 def fetch_ds():
